@@ -34,8 +34,13 @@ contract("Treasury", function(accounts) {
             expect(minter).to.be.equal(treasury.address);
         })
 
-
         it("should have one (1) signatory who is also the contract owner",
+        async () => {
+            const totalSignatories = new BN(await treasury.getSignatoryCount());
+            expect(totalSignatories.toNumber()).to.be.equal(1);
+        });
+
+        it("should have one (1) granted signatory who is also the contract owner",
         async () => {
             const grantedCount = new BN(await treasury.grantedCount());
             expect(grantedCount.toNumber()).to.be.equal(1);
@@ -68,6 +73,11 @@ contract("Treasury", function(accounts) {
             await expectRevert(
                 treasury.sign({ from: OWNER }),
                 "Treasury/no-proposals");
+        });
+
+        it("should NOT be in signing period", async () => {
+            const actual = await treasury.inSigningPeriod();
+            expect(actual).to.be.false;
         });
     })
 
@@ -171,6 +181,17 @@ contract("Treasury", function(accounts) {
                 expect(actual).to.be.true;
             });
 
+            it("should be outside signing period when proposal expires",
+            async () => {
+                await treasury.proposeMint(1000);
+
+                time.increase(60*60*48);
+
+                const isActive = await treasury.inSigningPeriod();
+
+                expect(isActive).to.be.false;
+            });
+
             it("should NOT be able to sign when there are no open proposals",
             async () => {
                 await expectRevert(
@@ -203,7 +224,7 @@ contract("Treasury", function(accounts) {
                 await expectRevert(
                     treasury.sign({ from: OWNER_2 }),
                     "Treasury/proposal-expired");
-            })
+            });
         })
 
         describe("minting", async () => {
