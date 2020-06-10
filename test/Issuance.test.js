@@ -15,6 +15,9 @@ contract("Issuance", function(accounts) {
 
     let miner, issuance;
 
+    const decimals = new BN("4");
+    const supply = new BN("1000000").mul(new BN("10").pow(decimals));
+
     beforeEach(async () => {
         miner = await Miner.new();
         issuance = await Issuance.new(miner.address);
@@ -36,18 +39,19 @@ contract("Issuance", function(accounts) {
 
     describe("purchasing miner", () => {
         beforeEach(async () => {
-            let amount = 1000 * 10 ** 4;
-            await miner.mint(amount);
-            await miner.transfer(issuance.address, amount);
+            await miner.mint(supply);
+            await miner.transfer(issuance.address, supply);
         });
 
         it("should issue miner tokens", async () => {
-            let amount = 1000 * 10 ** 4;
+            let amount = supply;
             let unitPrice = 50;
 
             await issuance.issue(ALICE, amount, unitPrice, "USD");
 
-            expect((await miner.balanceOf(ALICE)).toNumber()).to.be.equal(amount);
+            const balance = await miner.balanceOf(ALICE);
+
+            expect(balance.toNumber()).to.be.equal(amount.toNumber());
         });
 
         it("should NOT issue zero tokens", async () => {
@@ -60,12 +64,22 @@ contract("Issuance", function(accounts) {
         });
 
         it("should NOT issue tokens as an invalid user", async () => {
-            let amount = 0;
+            let amount = supply;
             let unitPrice = 50;
 
             await expectRevert(
                 issuance.issue(ALICE, amount, unitPrice, "USD", { from: ALICE }),
                 "Ownable: caller is not the owner");
+        });
+
+        it("should NOT exceed issuing more tokens than are available",
+        async () => {
+            let amount = supply.add(new BN(1));
+            let unitPrice = 50;
+
+            await expectRevert(
+                issuance.issue(ALICE, amount, unitPrice, "USD"),
+                "Issuance/balance-exceeded");
         });
 
         it("should NOT issue tokens as zero address", async () => {

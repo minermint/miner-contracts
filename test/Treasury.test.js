@@ -178,7 +178,7 @@ contract("Treasury", function(accounts) {
                     "Treasury/proposal-closed");
             });
 
-            it.only("should NOT be able to sign when revoked", async() => {
+            it("should NOT be able to sign when revoked", async() => {
                 await treasury.proposeGrant(ALICE, { from: OWNER });
                 await treasury.sign({ from: OWNER_2} );
 
@@ -232,7 +232,7 @@ contract("Treasury", function(accounts) {
                 const proposal = await treasury.proposals(latestProposal);
                 const mintProposal = await treasury.mintProposals(latestProposal);
 
-                expect(new BN(mintProposal)).to.be.equal(supply.toNumber());
+                expect(new BN(mintProposal).toNumber()).to.be.equal(supply.toNumber());
                 expect(proposal.who).to.be.equal(OWNER);
                 expect(proposal.open).to.be.false;
             });
@@ -248,7 +248,7 @@ contract("Treasury", function(accounts) {
                 const aliceBalance = await miner.balanceOf(ALICE);
 
                 expect(new BN(treasuryBalance).toNumber()).to.be.equal(0);
-                expect(new BN(aliceBalance).toNumber()).to.be.equal(supply);
+                expect(new BN(aliceBalance).toNumber()).to.be.equal(supply.toNumber());
             });
 
             it("should fund issuance for distributing miner", async () => {
