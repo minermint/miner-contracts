@@ -1,7 +1,9 @@
+const { BN, constants, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { expect } = require("chai");
+const { ZERO_ADDRESS } = constants;
+
 const Miner = artifacts.require("Miner");
 const Issuance = artifacts.require("Issuance");
-
-const BN = require("bn.js");
 
 contract("Issuance", function(accounts) {
     const OWNER = accounts[0];
@@ -43,7 +45,36 @@ contract("Issuance", function(accounts) {
             let amount = 1000 * 10 ** 4;
             let unitPrice = 50;
 
-            issuance.issue(ALICE, amount, unitPrice, "USD");
+            await issuance.issue(ALICE, amount, unitPrice, "USD");
+
+            expect((await miner.balanceOf(ALICE)).toNumber()).to.be.equal(amount);
+        });
+
+        it("should NOT issue zero tokens", async () => {
+            let amount = 0;
+            let unitPrice = 50;
+
+            await expectRevert(
+                issuance.issue(ALICE, amount, unitPrice, "USD"),
+                "Issuance/amount-invalid");
+        });
+
+        it("should NOT issue tokens as an invalid user", async () => {
+            let amount = 0;
+            let unitPrice = 50;
+
+            await expectRevert(
+                issuance.issue(ALICE, amount, unitPrice, "USD", { from: ALICE }),
+                "Ownable: caller is not the owner");
+        });
+
+        it("should NOT issue tokens as zero address", async () => {
+            let amount = 0;
+            let unitPrice = 50;
+
+            await expectRevert(
+                issuance.issue(ZERO_ADDRESS, amount, unitPrice, "USD"),
+                "Issuance/address-invalid");
         });
 
         it("should get trade count", async () => {
