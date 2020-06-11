@@ -147,6 +147,8 @@ contract("Treasury", (accounts) => {
 
     describe("managing authorisations", () => {
         describe("making and signing proposals", () => {
+            const fastForward = 60*60*48;
+
             beforeEach(async () => {
                 // set up 3 more signatories.
                 await treasury.proposeGrant(OWNER_2);
@@ -183,9 +185,9 @@ contract("Treasury", (accounts) => {
 
             it("should be outside signing period when proposal expires",
             async () => {
-                await treasury.proposeMint(1000);
+                await treasury.proposeMint(supply);
 
-                time.increase(60*60*48);
+                time.increase(fastForward);
 
                 const isActive = await treasury.inSigningPeriod();
 
@@ -217,9 +219,9 @@ contract("Treasury", (accounts) => {
 
             it("should timeout a proposal to mint after 48 hours",
             async() => {
-                await treasury.proposeMint(1000);
+                await treasury.proposeMint(supply);
 
-                time.increase(60*60*48);
+                time.increase(fastForward);
 
                 await expectRevert(
                     treasury.sign({ from: OWNER_2 }),
