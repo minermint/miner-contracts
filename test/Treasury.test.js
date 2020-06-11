@@ -7,7 +7,7 @@ const { ZERO_ADDRESS } = constants;
 
 const { expect } = require("chai");
 
-contract("Treasury", function(accounts) {
+contract("Treasury", (accounts) => {
     const OWNER = accounts[0];
     const OWNER_2 = accounts[1];
     const OWNER_3 = accounts[2];

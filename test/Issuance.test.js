@@ -5,7 +5,7 @@ const { ZERO_ADDRESS } = constants;
 const Miner = artifacts.require("Miner");
 const Issuance = artifacts.require("Issuance");
 
-contract("Issuance", function(accounts) {
+contract("Issuance", (accounts) => {
     const OWNER = accounts[0];
     const OWNER_2 = accounts[1];
     const OWNER_3 = accounts[2];
