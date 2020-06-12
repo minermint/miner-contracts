@@ -25,15 +25,14 @@ contract("Issuance", (accounts) => {
     });
 
     it("should fund the token issuance", async () => {
-        let amount = supply;
-        await miner.mint(amount);
-        await miner.transfer(issuance.address, amount);
+        await miner.mint(supply);
+        await miner.transfer(issuance.address, supply);
 
         let actual = new BN(await miner.balanceOf(issuance.address));
 
         assert.equal(
             actual.toNumber(),
-            amount.toNumber(),
+            supply.toNumber(),
             "Issuance/Incorrect amount");
     });
 
