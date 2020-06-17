@@ -125,7 +125,10 @@ contract Treasury is Ownable {
         onlySignatory()
         proposalPending()
     {
-        require(grantedCount > MINIMUM_AUTHORITIES, "Treasury/minimum-signatories");
+        require(
+            grantedCount > MINIMUM_AUTHORITIES,
+            "Treasury/minimum-signatories"
+        );
         require(signatory != address(0), "Treasury/invalid-address");
         require(
             signatories[signatory].granted,
@@ -151,7 +154,10 @@ contract Treasury is Ownable {
     {
         require(amount > 0, "Treasury/zero-amount");
 
-        withdrawalProposals[proposals.length] = WithdrawalProposal(recipient, amount);
+        withdrawalProposals[proposals.length] = WithdrawalProposal(
+            recipient,
+            amount
+        );
 
         _propose(ProposalType.Withdrawal);
     }
@@ -207,7 +213,9 @@ contract Treasury is Ownable {
 
         require(inSigningPeriod(), "Treasury/proposal-expired");
         require(proposals[index].open == true, "Treasury/proposal-closed");
-        require(signatures[index][msg.sender] != true, "Treasury/signatory-already-signed");
+        require(
+            signatures[index][msg.sender] != true,
+            "Treasury/signatory-already-signed");
 
         signatureAddresses[index][proposals[index].signatures] = msg.sender;
         signatures[index][msg.sender] = true;
@@ -219,7 +227,8 @@ contract Treasury is Ownable {
 
             if (proposals[index].proposalType == ProposalType.Mint) {
                 _printerGoesBrr(mintProposals[index].amount);
-            } else if (proposals[index].proposalType == ProposalType.Withdrawal) {
+            } else if (
+                proposals[index].proposalType == ProposalType.Withdrawal) {
                 _withdraw(
                     withdrawalProposals[index].recipient,
                     withdrawalProposals[index].amount);
@@ -246,7 +255,8 @@ contract Treasury is Ownable {
                 emit AccessGranted(signatory);
             }
         } else {
-            // only revoke signatory status if they have previously been granted access.
+            // only revoke signatory status if they have previously been granted
+            // access.
             if (accessProposals[index].action == AccessAction.Revoke) {
                 signatories[signatory].granted = false;
                 grantedCount = grantedCount.sub(1);
@@ -271,7 +281,9 @@ contract Treasury is Ownable {
     }
 
     modifier onlySignatory() {
-        require(signatories[msg.sender].granted == true, "Treasury/invalid-signatory");
+        require(
+            signatories[msg.sender].granted == true,
+            "Treasury/invalid-signatory");
         _;
     }
 
@@ -289,7 +301,9 @@ contract Treasury is Ownable {
     }
 
     modifier miniumSignatories() {
-        require(grantedCount >= MINIMUM_AUTHORITIES, "Treasury/minimum-signatories");
+        require(
+            grantedCount >= MINIMUM_AUTHORITIES,
+            "Treasury/minimum-signatories");
         _;
     }
 
