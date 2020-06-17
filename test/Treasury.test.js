@@ -124,7 +124,7 @@ contract("Treasury", (accounts) => {
             expect(count.toNumber()).to.be.equal(3);
         });
 
-        it("should revoke authority when the minimum number of revoke authorities is met",
+        it("should revoke signatory when the minimum number of revoke authorities is met",
         async () => {
             await treasury.proposeGrant(ALICE);
             await treasury.sign({ from: OWNER_2 });

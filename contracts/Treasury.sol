@@ -27,7 +27,7 @@ struct WithdrawalProposal {
 }
 
 struct AccessProposal {
-    address authority;
+    address signatory;
     AccessAction action;
 }
 
@@ -254,7 +254,7 @@ contract Treasury is Ownable {
     function _updateSignatoryAccess() private {
         uint256 index = getProposalsCount().sub(1);
         // is this a new signatory?
-        address signatory = accessProposals[index].authority;
+        address signatory = accessProposals[index].signatory;
 
         // don't re-add a signatory if they already have been granted access.
         if (!signatories[signatory].granted) {
