@@ -229,7 +229,6 @@ contract Treasury is Ownable {
         signatures[index].push(msg.sender);
         signed[index][msg.sender] = true;
         proposals[index].signatures = proposals[index].signatures.add(1);
-        emit Signed(index);
 
         if (proposals[index].signatures >= _getRequiredSignatoryCount()) {
             proposals[index].open = false;
@@ -247,6 +246,8 @@ contract Treasury is Ownable {
                 _updateSignatoryAccess();
             }
         }
+
+        emit Signed(index);
     }
 
     function _getRequiredSignatoryCount() private view returns (uint256) {
@@ -285,10 +286,14 @@ contract Treasury is Ownable {
 
     function _printerGoesBrr(uint256 amount) private {
         _token.mint(amount);
+
+        Minted(amount);
     }
 
     function _withdraw(address recipient, uint256 amount) private {
         _token.transfer(recipient, amount);
+
+        emit Withdrawn(recipient, amount);
     }
 
     modifier onlySignatory() {
@@ -326,5 +331,7 @@ contract Treasury is Ownable {
     event AccessGranted(address signatory);
     event AccessRevoked(address signatory);
 
-    event Withdrawn(uint256 amount);
+    event Minted(uint256 amount);
+
+    event Withdrawn(address recipient, uint256 amount);
 }

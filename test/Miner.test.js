@@ -16,6 +16,7 @@ contract("Miner", accounts => {
     const anotherAccount = accounts[2];
 
     let token;
+    let eventLogs;
 
     beforeEach(async () => {
 		token = await Miner.new();
@@ -49,7 +50,7 @@ contract("Miner", accounts => {
                 await token.setMinter(recipient);
 
                 const { logs } = await token.mint(mintedSupply, { from: recipient });
-                this.logs = logs;
+                eventLogs = logs;
             });
 
             it("should have a minter assigned", async () => {
@@ -62,7 +63,7 @@ contract("Miner", accounts => {
             });
 
             it('should emit Transfer event', async () => {
-                const event = expectEvent.inLogs(this.logs, 'Transfer', {
+                const event = expectEvent.inLogs(eventLogs, 'Transfer', {
                     from: ZERO_ADDRESS,
                     to: recipient,
                 });
@@ -298,7 +299,7 @@ contract("Miner", accounts => {
                         const approvedAmount = amount;
 
                         beforeEach(async () => {
-                            ({ logs: this.logs } = await token.approve(spender, approvedAmount, { from: initialHolder }));
+                            ({ logs: eventLogs } = await token.approve(spender, approvedAmount, { from: initialHolder }));
                         });
 
                         it("should emit an approval event", async () => {

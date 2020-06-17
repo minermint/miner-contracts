@@ -95,5 +95,14 @@ contract Issuance is Ownable {
 
         _tradesByAccount[recipient].push(history.length);
         _token.transfer(recipient, amount);
+
+        emit Issued(recipient, amount, unitPrice, currencyCode);
     }
+
+    event Issued(
+        address recipient,
+        uint256 amount,
+        uint256 unitPrice,
+        string currencyCode
+    );
 }
