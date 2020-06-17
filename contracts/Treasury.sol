@@ -138,6 +138,12 @@ contract Treasury is Ownable {
         _propose(ProposalType.Access);
     }
 
+    /**
+     * Proposes the withdrawal of Miner to a recipient's wallet address.
+     * @param recipient address The address of the recipient.
+     * @param amount uint256 The amount of Miner to withdraw to the recipient's
+     * wallet.
+     */
     function proposeWithdrawal(address recipient, uint256 amount)
         public
         onlySignatory()
@@ -169,12 +175,21 @@ contract Treasury is Ownable {
         sign();
     }
 
+    /**
+     * Gets the total number of signatories.
+     *
+     * The getSignatoryCount gets the total number of signatories, whether
+     * their access is granted or revoked. To retrieve the number of granted
+     * signatories, use grantedCount.
+     * @return uint256 The total number of signatories.
+     */
     function getSignatoryCount() public view returns(uint256) {
         return signatoriesIndex.length;
     }
 
     /**
      * Gets the number of proposals.
+     * @return uint256 The number of proposals.
      */
     function getProposalsCount() public view returns(uint256) {
         return proposals.length;
