@@ -163,11 +163,11 @@ contract("Treasury", (accounts) => {
                 const proposalCount = await treasury.getProposalsCount();
                 const latestProposal = await treasury.proposals(proposalCount - 1);
 
-                const signature = await treasury.signatureAddresses(
-                    proposalCount - 1,
-                    latestProposal.signatures - 1);
+                const signatures = await treasury.getSignatures(
+                    proposalCount - 1);
 
-                expect(signature).to.be.equal(OWNER_2);
+                expect(signatures).to.have.lengthOf(2);
+                expect(signatures[1]).to.be.equal(OWNER_2);
             });
 
             it("should NOT be able to add a proposal when one is pending",

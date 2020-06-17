@@ -48,13 +48,9 @@ contract Treasury is Ownable {
     uint256 public grantedCount;
 
     // signatures[proposalIndex][signatoryAddress] = signed (true)
-    mapping (uint256 => mapping(address => bool)) public signatures;
+    mapping (uint256 => mapping(address => bool)) public signed;
 
-    // signatures[proposalIndex][signatureIndex] = signatoryAddress
-    mapping (uint256 => mapping(uint256 => address)) public signatureAddresses;
-
-    // signaturesIndex[proposalIndex][signedIndex] = signatoryAddress
-    address[][] public signaturesIndex;
+    mapping (uint256 => address[]) public signatures;
 
     Proposal[] public proposals;
     mapping (uint256 => AccessProposal) public accessProposals;
@@ -202,6 +198,19 @@ contract Treasury is Ownable {
     }
 
     /**
+     * Gets the signatures for a proposal.
+     * @param proposal uint256 the proposal id.
+     * @return address[] A list if signatures for the proposal.
+     */
+    function getSignatures(uint256 proposal)
+        public
+        view
+        returns (address[] memory)
+    {
+        return signatures[proposal];
+    }
+
+    /**
      * Signs a proposal. If the required number of signatories is reached,
      * execute the appropriate proposal action.
      */
@@ -214,11 +223,11 @@ contract Treasury is Ownable {
         require(inSigningPeriod(), "Treasury/proposal-expired");
         require(proposals[index].open == true, "Treasury/proposal-closed");
         require(
-            signatures[index][msg.sender] != true,
+            signed[index][msg.sender] != true,
             "Treasury/signatory-already-signed");
 
-        signatureAddresses[index][proposals[index].signatures] = msg.sender;
-        signatures[index][msg.sender] = true;
+        signatures[index].push(msg.sender);
+        signed[index][msg.sender] = true;
         proposals[index].signatures = proposals[index].signatures.add(1);
         emit Signed(index);
 
