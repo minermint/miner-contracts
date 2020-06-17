@@ -36,26 +36,26 @@ struct Signatory {
 }
 
 contract Treasury is Ownable {
-    using SafeMath for uint;
+    using SafeMath for uint256;
     using SafeERC20 for Miner;
 
     Miner private _token;
 
-    uint8 constant MINIMUM_AUTHORITIES = 3;
+    uint8 public constant MINIMUM_AUTHORITIES = 3;
 
-    mapping (address => Signatory) public signatories;
+    mapping(address => Signatory) public signatories;
     address[] public signatoriesIndex;
     uint256 public grantedCount;
 
     // signatures[proposalIndex][signatoryAddress] = signed (true)
-    mapping (uint256 => mapping(address => bool)) public signed;
+    mapping(uint256 => mapping(address => bool)) public signed;
 
-    mapping (uint256 => address[]) public signatures;
+    mapping(uint256 => address[]) public signatures;
 
     Proposal[] public proposals;
-    mapping (uint256 => AccessProposal) public accessProposals;
-    mapping (uint256 => MintProposal) public mintProposals;
-    mapping (uint256 => WithdrawalProposal) public withdrawalProposals;
+    mapping(uint256 => AccessProposal) public accessProposals;
+    mapping(uint256 => MintProposal) public mintProposals;
+    mapping(uint256 => WithdrawalProposal) public withdrawalProposals;
 
     constructor(Miner token) public {
         _token = token;
@@ -67,7 +67,7 @@ contract Treasury is Ownable {
             return false;
         }
 
-        uint i = proposals.length.sub(1);
+        uint256 i = proposals.length.sub(1);
         return _inSigningPeriod(i);
     }
 
@@ -128,7 +128,8 @@ contract Treasury is Ownable {
         require(signatory != address(0), "Treasury/invalid-address");
         require(
             signatories[signatory].granted,
-            "Treasury/no-signatory-or-revoked");
+            "Treasury/no-signatory-or-revoked"
+        );
 
         uint256 index = getProposalsCount();
 
@@ -162,15 +163,15 @@ contract Treasury is Ownable {
         private
         onlySignatory()
         proposalPending()
-        returns(uint256)
+        returns (uint256)
     {
-        Proposal memory proposal =
-            Proposal(
-                msg.sender,
-                now + 48 hours,
-                0,
-                true,
-                proposalType);
+        Proposal memory proposal = Proposal(
+            msg.sender,
+            now + 48 hours,
+            0,
+            true,
+            proposalType
+        );
 
         proposals.push(proposal);
 
@@ -185,7 +186,7 @@ contract Treasury is Ownable {
      * signatories, use grantedCount.
      * @return uint256 The total number of signatories.
      */
-    function getSignatoryCount() public view returns(uint256) {
+    function getSignatoryCount() public view returns (uint256) {
         return signatoriesIndex.length;
     }
 
@@ -193,7 +194,7 @@ contract Treasury is Ownable {
      * Gets the number of proposals.
      * @return uint256 The number of proposals.
      */
-    function getProposalsCount() public view returns(uint256) {
+    function getProposalsCount() public view returns (uint256) {
         return proposals.length;
     }
 
@@ -214,9 +215,7 @@ contract Treasury is Ownable {
      * Signs a proposal. If the required number of signatories is reached,
      * execute the appropriate proposal action.
      */
-    function sign()
-        public
-        onlySignatory() {
+    function sign() public onlySignatory() {
         require(proposals.length > 0, "Treasury/no-proposals");
         uint256 index = getProposalsCount().sub(1);
 
@@ -224,7 +223,8 @@ contract Treasury is Ownable {
         require(proposals[index].open == true, "Treasury/proposal-closed");
         require(
             signed[index][msg.sender] != true,
-            "Treasury/signatory-already-signed");
+            "Treasury/signatory-already-signed"
+        );
 
         signatures[index].push(msg.sender);
         signed[index][msg.sender] = true;
@@ -237,10 +237,12 @@ contract Treasury is Ownable {
             if (proposals[index].proposalType == ProposalType.Mint) {
                 _printerGoesBrr(mintProposals[index].amount);
             } else if (
-                proposals[index].proposalType == ProposalType.Withdrawal) {
+                proposals[index].proposalType == ProposalType.Withdrawal
+            ) {
                 _withdraw(
                     withdrawalProposals[index].recipient,
-                    withdrawalProposals[index].amount);
+                    withdrawalProposals[index].amount
+                );
             } else {
                 _updateSignatoryAccess();
             }
@@ -292,7 +294,8 @@ contract Treasury is Ownable {
     modifier onlySignatory() {
         require(
             signatories[msg.sender].granted == true,
-            "Treasury/invalid-signatory");
+            "Treasury/invalid-signatory"
+        );
         _;
     }
 
@@ -304,7 +307,8 @@ contract Treasury is Ownable {
 
             require(
                 !proposals[index].open || !inSigningPeriod(),
-                "Treasury/proposal-pending");
+                "Treasury/proposal-pending"
+            );
         }
         _;
     }
@@ -312,7 +316,8 @@ contract Treasury is Ownable {
     modifier miniumSignatories() {
         require(
             grantedCount >= MINIMUM_AUTHORITIES,
-            "Treasury/minimum-signatories");
+            "Treasury/minimum-signatories"
+        );
         _;
     }
 

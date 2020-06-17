@@ -7,7 +7,9 @@
     "Hayden Young"
   ],
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "lint:solidity": "./node_modules/.bin/solhint -f table contracts/**/*.sol"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^3.0.2",
     "bip39": "^3.0.2",
@@ -31,6 +33,10 @@
     "eth-gas-reporter": "^0.2.17",
     "jest": "^25.1.0",
     "nodemon": "^1.19.1",
+    "prettier": "^2.0.5",
+    "prettier-plugin-solidity": "^1.0.0-alpha.54",
+    "solhint": "^3.0.0",
+    "solhint-plugin-prettier": "0.0.4",
     "solidity-coverage": "^0.7.7",
     "truffle-security": "git+https://github.com/ConsenSys/truffle-security.git"
   }
