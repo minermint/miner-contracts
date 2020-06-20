@@ -103,25 +103,5 @@ contract("Issuance", (accounts) => {
             const actual = await issuance.getHistoryCount();
             expect(Number(actual)).to.be.equal(3);
         });
-
-        it("should get alice trade count", async () => {
-            await issuance.issue(BOB, amount, unitPrice, currencyCode);
-            await issuance.issue(ALICE, amount, unitPrice, currencyCode);
-            await issuance.issue(BOB, amount, unitPrice, currencyCode);
-
-            const actual = await issuance.getAccountTradesCount(ALICE);
-            expect(Number(actual)).to.be.equal(1);
-        });
-
-        it("should get alice trade indexes", async () => {
-            await issuance.issue(BOB, amount, unitPrice, currencyCode);
-            await issuance.issue(ALICE, amount, unitPrice, currencyCode);
-            await issuance.issue(ALICE, amount, unitPrice, currencyCode);
-            await issuance.issue(BOB, amount, unitPrice, currencyCode);
-            var trades = await issuance.getAccountTradesIndexes(ALICE);
-            var tradesCount = await issuance.getAccountTradesCount(ALICE);
-
-            expect(trades).to.have.lengthOf(tradesCount);
-        });
     });
 });
