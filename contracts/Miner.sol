@@ -8,11 +8,7 @@ contract Miner is ERC20, Ownable {
 
     address private _minter;
 
-    constructor()
-        ERC20("Miner", "MINER")
-        Ownable()
-        public
-    {
+    constructor() public ERC20("Miner", "MINER") Ownable() {
         // explicitly require a minter to be created.
         _minter = address(0);
         _setupDecimals(DECIMALS);
