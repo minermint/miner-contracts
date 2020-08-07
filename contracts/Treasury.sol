@@ -493,6 +493,4 @@ contract Treasury is Ownable {
     event Withdrawn(address recipient, uint256 amount);
 
     event Vetoed(uint256 veto, uint256 proposal);
-
-    event Count(uint256 count);
 }
