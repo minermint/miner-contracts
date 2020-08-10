@@ -106,6 +106,7 @@ contract Treasury is Ownable {
     function proposeMint(uint256 amount)
         public
         onlySignatory()
+        noPendingProposals()
         miniumSignatories()
     {
         require(amount > 0, "Treasury/zero-amount");
@@ -191,8 +192,7 @@ contract Treasury is Ownable {
         onlySignatory()
         noPendingVetoes()
         miniumSignatories()
-        latestProposalPending()
-    {
+        latestProposalPending() {
         uint256 totalProposals = getProposalsCount();
 
         if (totalProposals > 0) {
@@ -243,12 +243,7 @@ contract Treasury is Ownable {
         }
     }
 
-    function _propose(ProposalType proposalType)
-        private
-        onlySignatory()
-        noPendingProposals()
-        returns (uint256)
-    {
+    function _propose(ProposalType proposalType) private returns (uint256) {
         Proposal memory proposal = Proposal(
             msg.sender,
             now + 48 hours,
