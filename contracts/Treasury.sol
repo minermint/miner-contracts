@@ -107,7 +107,7 @@ contract Treasury is Ownable {
         external
         onlySignatory()
         noPendingProposals()
-        miniumSignatories()
+        minimumSignatories()
     {
         require(amount > 0, "Treasury/zero-amount");
 
@@ -194,7 +194,7 @@ contract Treasury is Ownable {
         external
         onlySignatory()
         noPendingVetoes()
-        miniumSignatories()
+        minimumSignatories()
         latestProposalPending()
     {
         uint256 totalProposals = getProposalsCount();
@@ -468,7 +468,7 @@ contract Treasury is Ownable {
         _;
     }
 
-    modifier miniumSignatories() {
+    modifier minimumSignatories() {
         require(
             grantedCount >= MINIMUM_SIGNATORIES,
             "Treasury/minimum-signatories"
