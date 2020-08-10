@@ -104,7 +104,7 @@ contract Treasury is Ownable {
      * @param amount uint256 The proposed amount to mint.
      */
     function proposeMint(uint256 amount)
-        public
+        external
         onlySignatory()
         noPendingProposals()
         miniumSignatories()
@@ -122,12 +122,15 @@ contract Treasury is Ownable {
      * to.
      */
     function proposeGrant(address signatory)
-        public
+        external
         onlySignatory()
         noPendingProposals()
     {
         require(signatory != address(0), "Treasury/invalid-address");
-        require(signatories[signatory].action != AccessAction.Grant, "Treasury/access-granted");
+        require(
+            signatories[signatory].action != AccessAction.Grant,
+            "Treasury/access-granted"
+        );
 
         uint256 index = getProposalsCount();
 
@@ -142,7 +145,7 @@ contract Treasury is Ownable {
      * from.
      */
     function proposeRevoke(address signatory)
-        public
+        external
         onlySignatory()
         noPendingProposals()
     {
@@ -170,7 +173,7 @@ contract Treasury is Ownable {
      * wallet.
      */
     function proposeWithdrawal(address recipient, uint256 amount)
-        public
+        external
         onlySignatory()
         noPendingProposals()
     {
@@ -188,22 +191,21 @@ contract Treasury is Ownable {
      * Veto an existing, pending proposal.
      */
     function vetoProposal()
-        public
+        external
         onlySignatory()
         noPendingVetoes()
         miniumSignatories()
-        latestProposalPending() {
+        latestProposalPending()
+    {
         uint256 totalProposals = getProposalsCount();
 
-        if (totalProposals > 0) {
-            uint256 index = totalProposals.sub(1);
+        uint256 index = totalProposals.sub(1);
 
-            Veto memory veto = Veto(msg.sender, now + 48 hours, 0, true, index);
+        Veto memory veto = Veto(msg.sender, now + 48 hours, 0, true, index);
 
-            vetoes.push(veto);
+        vetoes.push(veto);
 
-            endorseVeto();
-        }
+        endorseVeto();
     }
 
     /**
@@ -265,9 +267,9 @@ contract Treasury is Ownable {
      * signatories, use grantedCount.
      * @return uint256 The total number of signatories.
      */
-     function getSignatoryCount() public view returns (uint256) {
-         return signatoriesIndex.length;
-     }
+    function getSignatoryCount() public view returns (uint256) {
+        return signatoriesIndex.length;
+    }
 
     /**
      * Gets the number of proposals.
@@ -291,7 +293,7 @@ contract Treasury is Ownable {
      * @return address[] A list if signatures for the proposal.
      */
     function getSignatures(uint256 proposal)
-        public
+        external
         view
         returns (address[] memory)
     {
@@ -304,7 +306,7 @@ contract Treasury is Ownable {
      * @return address[] A list if signatures for the veto.
      */
     function getVetoEndorsements(uint256 veto)
-        public
+        external
         view
         returns (address[] memory)
     {
