@@ -193,8 +193,6 @@ contract Treasury is Ownable {
         miniumSignatories()
         latestProposalPending()
     {
-        require(msg.sender != address(0), "Treasury/invalid-address");
-
         uint256 totalProposals = getProposalsCount();
 
         if (totalProposals > 0) {
@@ -217,8 +215,6 @@ contract Treasury is Ownable {
         latestProposalPending()
         onlySignatory()
     {
-        require(msg.sender != address(0), "Treasury/invalid-address");
-
         uint256 totalVetoes = getVetoCount();
 
         require(totalVetoes > 0, "Treasury/no-vetoes");
