@@ -20,7 +20,7 @@ const saveNetworkArtifact = async function(contract, network) {
     fs.writeFileSync(contractPath, JSON.stringify(artifact, null, 2));
 }
 
-module.exports = async function(deployer) {
+module.exports = async function(deployer, network, accounts) {
     const miner = await Miner.deployed();
 
     await deployer.deploy(Treasury, miner.address);
@@ -28,5 +28,10 @@ module.exports = async function(deployer) {
 
     saveNetworkArtifact(treasury, deployer.network);
 
-    await miner.setMinter(treasury.address);
+    // check if miner token owner has rights to set Minter.
+    if (await miner.owner() === accounts[0]) {
+        await miner.setMinter(treasury.address);
+    } else {
+        console.log("manually set miner minter to", treasury.address);
+    }
 }
