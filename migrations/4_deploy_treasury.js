@@ -32,6 +32,9 @@ module.exports = async function(deployer, network, accounts) {
     if (await miner.owner() === accounts[0]) {
         await miner.setMinter(treasury.address);
     } else {
+        const newOwner = process.env.CONTRACT_OWNER;
+
+        await treasury.transferOwnership(newOwner);
         console.log("manually set miner minter to", treasury.address);
     }
 }
