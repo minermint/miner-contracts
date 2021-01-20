@@ -432,14 +432,14 @@ contract Treasury is Ownable {
         _;
     }
 
-    event Signed(uint256 index);
+    event Signed(uint256 indexed index);
 
-    event AccessGranted(address signatory);
-    event AccessRevoked(address signatory);
+    event AccessGranted(address indexed signatory);
+    event AccessRevoked(address indexed signatory);
 
     event Minted(uint256 amount);
 
-    event Withdrawn(address recipient, uint256 amount);
+    event Withdrawn(address indexed recipient, uint256 amount);
 
-    event Vetoed(uint256 veto, uint256 proposal);
+    event Vetoed(uint256 indexed veto, uint256 indexed proposal);
 }
