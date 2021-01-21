@@ -12,6 +12,7 @@ coverage.json
 .coverage*/
 
 build/
+networks/*-fork
 networks/development
 networks/soliditycoverage
 

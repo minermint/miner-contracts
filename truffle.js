@@ -42,7 +42,7 @@ module.exports = {
             network_id: "1",
             confirmations: 6,
             timeoutBlocks: 200,
-            gasPrice: 130000000000,
+            gasPrice: 82000000000
         },
     },
     // Configure your compilers
