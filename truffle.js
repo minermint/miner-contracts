@@ -25,6 +25,16 @@ module.exports = {
             skipDryRun: true,
             gasPrice: 10000000000,
         },
+        kovan: {
+            provider: new HDWalletProvider(
+                process.env.PRIVATE_KEY,
+                process.env.KOVAN_URL),
+            network_id: "42",
+            confirmations: 4,
+            timeoutBlocks: 200,
+            skipDryRun: true,
+            gasPrice: 10000000000,
+        },
         mainnet: {
             provider: new HDWalletProvider(
                 process.env.PRIVATE_KEY,
@@ -32,7 +42,7 @@ module.exports = {
             network_id: "1",
             confirmations: 6,
             timeoutBlocks: 200,
-            gasPrice: 130000000000,
+            gasPrice: 82000000000
         },
     },
     // Configure your compilers

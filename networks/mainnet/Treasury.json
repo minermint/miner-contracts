@@ -1,6 +1,6 @@
 {
   "contractName": "Treasury",
-  "address": "0xaA90fD5086a0E09b6a33E72CeD32f1d27a18C50c",
+  "address": "0x864EEF879b926fDDc5615B67301F775d716AB1ca",
   "abi": [
     {
       "inputs": [
@@ -18,7 +18,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "address",
           "name": "signatory",
           "type": "address"
@@ -32,7 +32,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "address",
           "name": "signatory",
           "type": "address"
@@ -80,7 +80,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "index",
           "type": "uint256"
@@ -94,13 +94,13 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "veto",
           "type": "uint256"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "proposal",
           "type": "uint256"
@@ -114,7 +114,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "address",
           "name": "recipient",
           "type": "address"
