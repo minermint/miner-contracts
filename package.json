@@ -13,6 +13,8 @@
         "lint:tests": "./node_modules/.bin/eslint ./test/",
         "deploy:development": "truffle deploy --network development",
         "deploy:staging": "truffle deploy --network kovan",
+        "deploy:goerli": "truffle deploy --network goerli --f=2 --to=2",
+        "deploy:mumbai": "truffle deploy --network mumbai --f=7",
         "test": "truffle run ganache-test"
     },
     "dependencies": {
@@ -31,13 +33,14 @@
         "gsap": "^2.1.3",
         "hdkey": "^1.1.1",
         "sha256": "^0.2.0",
+        "truffle-flattener": "^1.5.0",
         "web3": "^1.3.0",
         "web3-eth-accounts": "^1.3.0"
     },
     "devDependencies": {
         "@openzeppelin/test-helpers": "^0.5.11",
         "@truffle/contract": "^4.2.1",
-        "@truffle/hdwallet-provider": "^1.1.0",
+        "@truffle/hdwallet-provider": "^1.4.0",
         "chai": "^4.2.0",
         "dotenv": "^8.2.0",
         "eslint": "^7.9.0",

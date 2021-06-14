@@ -33,6 +33,27 @@ module.exports = {
             timeoutBlocks: 200,
             gasPrice: 10000000000
         },
+        goerli: {
+            provider: new HDWalletProvider
+            (
+                config.mnemonic_or_private_key,
+                "wss://goerli.infura.io/ws/v3/"+config.infura_id
+            ),
+            network_id: "5",
+            confirmations: 4,
+            timeoutBlocks: 20,
+            gasPrice: 50000000000
+        },
+        mumbai: {
+            provider: () => new HDWalletProvider(
+                config.mnemonic_or_private_key,
+                "https://rpc-mumbai.matic.today"
+            ),
+            network_id: 80001,
+            confirmations: 3,
+            timeoutBlocks: 200,
+            skipDryRun: true
+        },
         mainnet: {
             provider: new HDWalletProvider(
                 config.mnemonic_or_private_key,
